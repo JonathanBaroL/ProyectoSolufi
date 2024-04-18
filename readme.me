@@ -1,0 +1,88 @@
+¡Hola equipo!
+
+Les presento mi proyecto creado con Angular y Django. Aquí tienen algunas instrucciones para su uso:
+
+1. Dockerización del backend:
+    * Asegúrense de tener instalados Docker y Docker-compose en su sistema.
+    * En la raíz del proyecto, encontrarán un archivo docker-compose.yml.
+    * Para inicializar el servicio, ejecuten el siguiente comando:
+        
+        sudo docker-compose build // Esto para compilar y construir la imagen de docker
+
+    * Luego, levanten el servicio con:
+
+        sudo docker-compose up
+
+    * Para detener el servicio, utilicen el comandodo:
+    
+        sudo docker-compose down
+
+    * Si todo va bien, el servicio estará disponible en:
+
+        http://localhost:8000
+
+    Mediante esa ruta el frontend podra consultar al api de django para iniciar sesión o registrar nuevos usuarios.
+    Ejemplo:
+    
+        http://localhost:8000/api/iniciar-sesion/
+
+    Con un body ejemplo: 
+
+        username: user1
+        password: 2024
+
+2. Uso del frontend de Angular:
+    * Para ejecutar Angular manualmente, necesitarán tener instalados Node (última versión), npm (última versión) y Angular CLI.
+    * Una vez instaladas las dependencias anteriores, inicien el servicio con:
+
+        npm start
+
+    * Esto compilará el proyecto y estará disponible en:
+        http://localhost:4200/
+
+    * Si no están logueados, serán redirigidos automáticamente a:
+
+        http://localhost:4200/login
+
+    * Ahí puedes registrar un nuevo usuario o en su defecto iniciar sesión si ya se tiene un usuario registrado.
+
+    * Si se ha logeado correctamente, el sistema redirige al home del proyecto.
+
+3. Interacción con SQL Server
+
+    * Como una caracteristica única, también se creo un modulo en backend que se llama:
+        external_bdd
+    * Es otra app dentro de backend con su propio enrutamiento para poder interactuar con SQL Server
+    * Previamente con Microsoft SQL Server Management Studio se debe tener creada una base de datos con una tabla 'ListaCarros' que tenga la siguiente estructura:
+        id - bigint PK
+        name - varchar(10)
+        description - varchar(100)
+        status - int
+    * Así le creamos una serie de registros que queremos que nuestra api pueda consultar y servir al backend.
+
+    * También en el settings.py del modulo backend, se debe configurar esta base de datos con la siguiente estructura:
+
+        DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        },
+        'external_db': {  # BDD externa
+            'ENGINE': 'mssql',  # Usar el controlador ODBC de SQL Server
+            'NAME': 'solufiDB',  # Nombre de la base de datos en SQL Server
+            'USER': 'solufi',  # Usuario de SQL Server
+            'PASSWORD': 'solufi',  # Contraseña de SQL Server
+            'HOST': 'localhost:',  # Dirección del servidor SQL Server
+            'PORT': '1433',  # Puerto (deja vacío si estás usando el puerto predeterminado)
+            'OPTIONS': {
+                'driver': 'ODBC Driver 18 for SQL Server',  # Nombre del controlador ODBC
+            },
+        }
+
+    * Obsvermeos que la BD default es la sqlite propia de Django para el manejo y control de usuarios desde el panel admin de Django. Así nuestro frontend puede iniciar sesión con ella o añadir nuevos usuarios.
+
+    * y la siguiente BD es la Externa que responde a SQL Server, Docker y Django ya estan preparados para que cuando se levante el servicio, se pueda comunicar con SQLServer a través del enrutamiento y métodos configurados.
+
+Dudas o sugerencias con Jonathan Baro - jonathan.developer21@gmail.com
+
+¡Gracias!
