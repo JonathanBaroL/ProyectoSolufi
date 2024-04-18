@@ -7,7 +7,8 @@ WORKDIR /app
 RUN apt-get update \
     && apt-get install -y --no-install-recommends gcc musl-dev libpq-dev python3-dev libffi-dev \
     && apt-get install -y --no-install-recommends mariadb-client libmariadb-dev-compat \
-    && pip install --upgrade pip
+    && pip install --upgrade pip \
+    &&  unixodbc-dev \
 
 RUN apt-get install -y --no-install-recommends unixodbc-dev
 
