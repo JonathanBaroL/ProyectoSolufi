@@ -1,17 +1,15 @@
-FROM python:3.11.6-alpine3.18 
+FROM python:3.11.6-slim
 
 ENV PYTHONUNBUFFERED=1 
 
 WORKDIR /app 
 
-RUN apk update \
-    && apk add --no-cache gcc musl-dev postgresql-dev python3-dev libffi-dev \
-    && apk add --no-cache mariadb-dev\
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends gcc musl-dev libpq-dev python3-dev libffi-dev \
+    && apt-get install -y --no-install-recommends mariadb-client libmariadb-dev-compat \
     && pip install --upgrade pip
 
-RUN apk add --no-cache mariadb-client mariadb-connector-c-dev    
-
-RUN pip install mysqlclient
+RUN apt-get install -y --no-install-recommends unixodbc-dev
 
 COPY ./requirements.txt ./ 
 
@@ -22,4 +20,4 @@ COPY ./ ./
 # Expone el puerto 8000 al mundo exterior
 EXPOSE 8000
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"] 
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
