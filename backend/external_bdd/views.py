@@ -19,15 +19,10 @@ class get_vehiculos(APIView):
     authentication_classes = [JWTAuthentication]  
     
     def get(self, request):
-        # Accede al usuario autenticado a través del objeto request
         user = request.user
         print("Acceso correcto a la vista para: " + str(user))
-         # Lógica para obtener los vehículos
         vehiculos = ListaCarros.objects.all()
-        
-        # Aquí podrías necesitar convertir vehiculos a un formato serializable si no es un diccionario
         vehiculos_serializados = [{'name': vehiculo.name, 'description': vehiculo.description} for vehiculo in vehiculos]
 
-        # Devolver la respuesta HTTP
         return JsonResponse({'vehiculos': vehiculos_serializados}, safe=False)
 
